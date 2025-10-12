@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo, lazy, Suspense } from 'react';
 import { Button } from './ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { 
@@ -23,11 +23,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
-import LineupBuilder from './LineupBuilder';
-import PropBetFinder from './PropBetFinder';
-import DashboardOverview from './DashboardOverview';
-import GameAnalysis from './GameAnalysis';
-import PopularParlays from './PopularParlays';
+import { DashboardLoader } from './SkeletonLoader';
+
+// Lazy load dashboard components for better performance
+const LineupBuilder = lazy(() => import('./LineupBuilder'));
+const PropBetFinder = lazy(() => import('./PropBetFinder'));
+const DashboardOverview = lazy(() => import('./DashboardOverview'));
+const GameAnalysis = lazy(() => import('./GameAnalysis'));
+const PopularParlays = lazy(() => import('./PopularParlays'));
 
 interface DashboardProps {
   onLogout: () => void;
@@ -38,18 +41,38 @@ export default function Dashboard({ onLogout }: DashboardProps) {
   const [selectedSlate, setSelectedSlate] = useState('main');
   const [activeView, setActiveView] = useState('games');
 
-  const renderMainContent = () => {
+  const renderMainContent = useMemo(() => {
     switch (activeView) {
       case 'games':
-        return <DashboardOverview sport={selectedSport} />;
+        return (
+          <Suspense fallback={<DashboardLoader />}>
+            <DashboardOverview sport={selectedSport} />
+          </Suspense>
+        );
       case 'parlays':
-        return <PopularParlays sport={selectedSport} />;
+        return (
+          <Suspense fallback={<DashboardLoader />}>
+            <PopularParlays sport={selectedSport} />
+          </Suspense>
+        );
       case 'lineup-builder':
-        return <LineupBuilder sport={selectedSport} slate={selectedSlate} />;
+        return (
+          <Suspense fallback={<DashboardLoader />}>
+            <LineupBuilder sport={selectedSport} slate={selectedSlate} />
+          </Suspense>
+        );
       case 'prop-bet-finder':
-        return <PropBetFinder sport={selectedSport} />;
+        return (
+          <Suspense fallback={<DashboardLoader />}>
+            <PropBetFinder sport={selectedSport} />
+          </Suspense>
+        );
       case 'game-analysis':
-        return <GameAnalysis sport={selectedSport} />;
+        return (
+          <Suspense fallback={<DashboardLoader />}>
+            <GameAnalysis sport={selectedSport} />
+          </Suspense>
+        );
       default:
         return (
           <div className="flex items-center justify-center h-full">
@@ -60,7 +83,7 @@ export default function Dashboard({ onLogout }: DashboardProps) {
           </div>
         );
     }
-  };
+  }, [activeView, selectedSport, selectedSlate]);
 
   return (
     <div className="min-h-screen bg-slate-900 flex">
@@ -141,6 +164,13 @@ export default function Dashboard({ onLogout }: DashboardProps) {
               <Settings className="w-5 h-5" />
               Settings
             </button>
+            <button
+              onClick={onLogout}
+              className="w-full flex items-center gap-3 px-4 py-2 rounded-lg transition-colors text-red-400 hover:text-red-300 hover:bg-red-500/10"
+            >
+              <LogOut className="w-5 h-5" />
+              Sign Out
+            </button>
           </div>
         </nav>
       </aside>
@@ -213,7 +243,7 @@ export default function Dashboard({ onLogout }: DashboardProps) {
 
         {/* Main Content */}
         <main className="flex-1 overflow-auto bg-slate-900 p-6">
-          {renderMainContent()}
+          {renderMainContent}
         </main>
       </div>
     </div>

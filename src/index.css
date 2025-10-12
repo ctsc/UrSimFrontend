@@ -4341,3 +4341,96 @@ html {
     transform: translate3d(var(--tw-exit-translate-x, 0), var(--tw-exit-translate-y, 0), 0) scale3d(var(--tw-exit-scale, 1), var(--tw-exit-scale, 1), var(--tw-exit-scale, 1)) rotate(var(--tw-exit-rotate, 0));
   }
 }
+
+/* Homepage Ticker Animation */
+@keyframes scroll-homepage {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-scroll-homepage {
+  animation: scroll-homepage 40s linear infinite;
+}
+
+/* Ensure ticker stays fixed at top */
+.ticker-static {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  z-index: 9999 !important;
+  will-change: transform;
+}
+
+/* Performance optimizations */
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Optimize animations with will-change */
+.animate-scroll-homepage {
+  will-change: transform;
+}
+
+/* Optimize motion components */
+[data-motion] {
+  will-change: transform, opacity;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .animate-scroll-homepage {
+    animation: none !important;
+  }
+}
+
+/* Optimize images and media */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Improve text rendering */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+  text-rendering: optimizeLegibility;
+}
+
+/* GPU acceleration for transforms */
+.transform,
+[class*="translate"],
+[class*="rotate"],
+[class*="scale"] {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}

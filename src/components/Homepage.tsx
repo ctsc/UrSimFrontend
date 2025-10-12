@@ -2,7 +2,7 @@ import { Button } from './ui/button';
 import { Card } from './ui/card';
 import { TrendingUp, Target, BarChart3, Shield, CheckCircle, ArrowRight, Sparkles, Zap, Code } from 'lucide-react';
 import { motion } from 'motion/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 interface HomepageProps {
   onLogin: () => void;
@@ -12,11 +12,21 @@ interface HomepageProps {
 export default function Homepage({ onLogin, onSignUp }: HomepageProps) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
+  // Throttle mouse movement for better performance using requestAnimationFrame
   useEffect(() => {
+    let ticking = false;
+    
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setMousePosition({ x: e.clientX, y: e.clientY });
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
-    window.addEventListener('mousemove', handleMouseMove);
+    
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
@@ -49,7 +59,7 @@ export default function Homepage({ onLogin, onSignUp }: HomepageProps) {
       />
 
       {/* Navbar */}
-      <nav className="fixed top-0 w-full bg-black/50 backdrop-blur-xl border-b border-cyan-500/20 z-50">
+      <nav className="fixed top-8 w-full bg-black/50 backdrop-blur-xl border-b border-cyan-500/20 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <motion.div 
@@ -95,6 +105,39 @@ export default function Homepage({ onLogin, onSignUp }: HomepageProps) {
           </div>
         </div>
       </nav>
+
+      {/* Promo Ticker Bar */}
+      <div className="ticker-static bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 text-white py-3 overflow-hidden shadow-lg border-b border-white/20">
+        <div className="flex animate-scroll-homepage whitespace-nowrap items-center">
+          <span className="text-base font-extrabold tracking-wide mr-20 text-white drop-shadow-lg">
+            🎯 Use code: PlayNow - Get 50% off your first month! 🎯
+          </span>
+          <span className="text-base font-extrabold tracking-wide mr-20 text-white drop-shadow-lg">
+            🚀 Limited Time Offer - Start Your DFS Journey Today! 🚀
+          </span>
+          <span className="text-base font-extrabold tracking-wide mr-20 text-white drop-shadow-lg">
+            💎 Premium Analytics - Unlock Your Winning Potential! 💎
+          </span>
+          <span className="text-base font-extrabold tracking-wide mr-20 text-white drop-shadow-lg">
+            🎯 Use code: PlayNow - Get 50% off your first month! 🎯
+          </span>
+          <span className="text-base font-extrabold tracking-wide mr-20 text-white drop-shadow-lg">
+            🚀 Limited Time Offer - Start Your DFS Journey Today! 🚀
+          </span>
+          <span className="text-base font-extrabold tracking-wide mr-20 text-white drop-shadow-lg">
+            💎 Premium Analytics - Unlock Your Winning Potential! 💎
+          </span>
+          <span className="text-base font-extrabold tracking-wide mr-20 text-white drop-shadow-lg">
+            🎯 Use code: PlayNow - Get 50% off your first month! 🎯
+          </span>
+          <span className="text-base font-extrabold tracking-wide mr-20 text-white drop-shadow-lg">
+            🚀 Limited Time Offer - Start Your DFS Journey Today! 🚀
+          </span>
+          <span className="text-base font-extrabold tracking-wide mr-20 text-white drop-shadow-lg">
+            💎 Premium Analytics - Unlock Your Winning Potential! 💎
+          </span>
+        </div>
+      </div>
 
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 px-4">

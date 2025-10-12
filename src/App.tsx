@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
-import Homepage from './components/Homepage';
-import Dashboard from './components/Dashboard';
-import LoginPage from './components/LoginPage';
-import RegisterPage from './components/RegisterPage';
+import React, { useState, Suspense, lazy } from 'react';
+import { SimpleLoader } from './components/SkeletonLoader';
+
+// Lazy load components for better performance
+const Homepage = lazy(() => import('./components/Homepage'));
+const Dashboard = lazy(() => import('./components/Dashboard'));
+const LoginPage = lazy(() => import('./components/LoginPage'));
+const RegisterPage = lazy(() => import('./components/RegisterPage'));
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -45,24 +48,26 @@ function App() {
 
   return (
     <div className="min-h-screen">
-      {currentView === 'home' && (
-        <Homepage onLogin={handleLogin} onSignUp={handleSignUp} />
-      )}
-      {currentView === 'login' && (
-        <LoginPage 
-          onLogin={handleLoginSuccess} 
-          onSwitchToRegister={handleSwitchToRegister}
-        />
-      )}
-      {currentView === 'register' && (
-        <RegisterPage 
-          onRegister={handleRegisterSuccess} 
-          onSwitchToLogin={handleSwitchToLogin}
-        />
-      )}
-      {currentView === 'dashboard' && (
-        <Dashboard onLogout={handleLogout} />
-      )}
+      <Suspense fallback={<SimpleLoader />}>
+        {currentView === 'home' && (
+          <Homepage onLogin={handleLogin} onSignUp={handleSignUp} />
+        )}
+        {currentView === 'login' && (
+          <LoginPage 
+            onLogin={handleLoginSuccess} 
+            onSwitchToRegister={handleSwitchToRegister}
+          />
+        )}
+        {currentView === 'register' && (
+          <RegisterPage 
+            onRegister={handleRegisterSuccess} 
+            onSwitchToLogin={handleSwitchToLogin}
+          />
+        )}
+        {currentView === 'dashboard' && (
+          <Dashboard onLogout={handleLogout} />
+        )}
+      </Suspense>
     </div>
   );
 }

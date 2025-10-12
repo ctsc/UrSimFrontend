@@ -52,9 +52,42 @@
     build: {
       target: 'esnext',
       outDir: 'build',
+      minify: 'terser',
+      terserOptions: {
+        compress: {
+          drop_console: true,
+          drop_debugger: true,
+        },
+      },
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            'react-vendor': ['react', 'react-dom'],
+            'ui-components': [
+              '@radix-ui/react-accordion',
+              '@radix-ui/react-alert-dialog',
+              '@radix-ui/react-avatar',
+              '@radix-ui/react-checkbox',
+              '@radix-ui/react-dialog',
+              '@radix-ui/react-dropdown-menu',
+              '@radix-ui/react-popover',
+              '@radix-ui/react-select',
+              '@radix-ui/react-tabs',
+            ],
+            'charts': ['recharts'],
+            'motion': ['motion'],
+            'icons': ['lucide-react'],
+          },
+        },
+      },
+      chunkSizeWarningLimit: 1000,
+      sourcemap: false,
     },
     server: {
       port: 3000,
       open: true,
+    },
+    optimizeDeps: {
+      include: ['react', 'react-dom', 'lucide-react'],
     },
   });
