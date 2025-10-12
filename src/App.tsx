@@ -1,5 +1,6 @@
-import React, { useState, Suspense, lazy } from 'react';
+import React, { useState, Suspense, lazy, useEffect } from 'react';
 import { SimpleLoader } from './components/SkeletonLoader';
+import { useAuth } from './contexts/AuthContext';
 
 // Lazy load components for better performance
 const Homepage = lazy(() => import('./components/Homepage'));
@@ -8,8 +9,17 @@ const LoginPage = lazy(() => import('./components/LoginPage'));
 const RegisterPage = lazy(() => import('./components/RegisterPage'));
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { user, logout } = useAuth();
   const [currentView, setCurrentView] = useState<'home' | 'login' | 'register' | 'dashboard'>('home');
+
+  // Auto-navigate based on auth state
+  useEffect(() => {
+    if (user && (currentView === 'home' || currentView === 'login' || currentView === 'register')) {
+      setCurrentView('dashboard');
+    } else if (!user && currentView === 'dashboard') {
+      setCurrentView('home');
+    }
+  }, [user, currentView]);
 
   const handleLogin = () => {
     setCurrentView('login');
@@ -20,17 +30,15 @@ function App() {
   };
 
   const handleLoginSuccess = () => {
-    setIsLoggedIn(true);
     setCurrentView('dashboard');
   };
 
   const handleRegisterSuccess = () => {
-    setIsLoggedIn(true);
     setCurrentView('dashboard');
   };
 
-  const handleLogout = () => {
-    setIsLoggedIn(false);
+  const handleLogout = async () => {
+    await logout();
     setCurrentView('home');
   };
 
