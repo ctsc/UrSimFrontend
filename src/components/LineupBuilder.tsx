@@ -10,14 +10,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Slider } from './ui/slider';
 import { Lock, X, ThumbsUp, ThumbsDown, Download, Save, Play } from 'lucide-react';
 import { Progress } from './ui/progress';
-
-interface LineupBuilderProps {
-  sport: string;
-  slate: string;
-}
+import type { LineupBuilderProps, Player, Lineup } from '../types';
 
 // Mock player data
-const mockPlayers = [
+const mockPlayers: Player[] = [
   { id: 1, position: 'QB', name: 'Patrick Mahomes', team: 'KC', opponent: '@LAC', salary: 8500, projection: 24.8, status: 'Active' },
   { id: 2, position: 'QB', name: 'Josh Allen', team: 'BUF', opponent: 'vs MIA', salary: 8200, projection: 23.4, status: 'Active' },
   { id: 3, position: 'RB', name: 'Christian McCaffrey', team: 'SF', opponent: '@DAL', salary: 9000, projection: 22.1, status: 'Active' },
@@ -37,7 +33,7 @@ export default function LineupBuilder({ sport, slate }: LineupBuilderProps) {
   const [numLineups, setNumLineups] = useState('3');
   const [lockedPlayers, setLockedPlayers] = useState<Set<number>>(new Set());
   const [excludedPlayers, setExcludedPlayers] = useState<Set<number>>(new Set());
-  const [generatedLineups, setGeneratedLineups] = useState<any[]>([]);
+  const [generatedLineups, setGeneratedLineups] = useState<Lineup[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [progress, setProgress] = useState(0);
   const [minSalary, setMinSalary] = useState([48000]);

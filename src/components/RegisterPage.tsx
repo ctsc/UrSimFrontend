@@ -5,11 +5,7 @@ import { Card } from './ui/card';
 import { TrendingUp, Eye, EyeOff, ArrowRight, Sparkles, CheckCircle } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useAuth } from '../contexts/AuthContext';
-
-interface RegisterPageProps {
-  onRegister: () => void;
-  onSwitchToLogin: () => void;
-}
+import type { RegisterPageProps, FirebaseError } from '../types';
 
 export default function RegisterPage({ onRegister, onSwitchToLogin }: RegisterPageProps) {
   const [formData, setFormData] = useState({
@@ -69,18 +65,19 @@ export default function RegisterPage({ onRegister, onSwitchToLogin }: RegisterPa
       const displayName = `${formData.firstName} ${formData.lastName}`.trim();
       await signup(formData.email, formData.password, displayName);
       onRegister();
-    } catch (err: any) {
-      console.error('Registration error:', err);
+    } catch (err) {
+      const error = err as FirebaseError;
+      console.error('Registration error:', error);
       const newErrors: Record<string, string> = {};
       
-      if (err.code === 'auth/email-already-in-use') {
+      if (error.code === 'auth/email-already-in-use') {
         newErrors.email = 'This email is already registered';
-      } else if (err.code === 'auth/weak-password') {
+      } else if (error.code === 'auth/weak-password') {
         newErrors.password = 'Password is too weak';
-      } else if (err.code === 'auth/invalid-email') {
+      } else if (error.code === 'auth/invalid-email') {
         newErrors.email = 'Invalid email address';
       } else {
-        newErrors.general = err.message || 'Failed to create account. Please try again.';
+        newErrors.general = error.message || 'Failed to create account. Please try again.';
       }
       
       setErrors(newErrors);
@@ -96,9 +93,10 @@ export default function RegisterPage({ onRegister, onSwitchToLogin }: RegisterPa
     try {
       await loginWithGoogle();
       onRegister();
-    } catch (err: any) {
-      console.error('Google signup error:', err);
-      setErrors({ general: err.message || 'Failed to sign up with Google. Please try again.' });
+    } catch (err) {
+      const error = err as FirebaseError;
+      console.error('Google signup error:', error);
+      setErrors({ general: error.message || 'Failed to sign up with Google. Please try again.' });
     } finally {
       setIsLoading(false);
     }
@@ -211,18 +209,18 @@ export default function RegisterPage({ onRegister, onSwitchToLogin }: RegisterPa
                       <label htmlFor="firstName" className="text-slate-300 text-sm font-medium">
                         First Name <span className="text-red-400">*</span>
                       </label>
-                      <Input
-                        id="firstName"
-                        name="firstName"
-                        type="text"
-                        value={formData.firstName}
-                        onChange={handleInputChange}
+                        <Input
+                          id="firstName"
+                          name="firstName"
+                          type="text"
+                          value={formData.firstName}
+                          onChange={handleInputChange}
                         placeholder="Enter first name"
                         className={`bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus:border-cyan-500 focus:ring-cyan-500/20 transition-all ${
-                          errors.firstName ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''
-                        }`}
-                        required
-                      />
+                            errors.firstName ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''
+                          }`}
+                          required
+                        />
                       {errors.firstName && (
                         <p className="text-red-400 text-xs mt-1 flex items-center gap-1">
                           <span>⚠</span> {errors.firstName}
@@ -234,18 +232,18 @@ export default function RegisterPage({ onRegister, onSwitchToLogin }: RegisterPa
                       <label htmlFor="lastName" className="text-slate-300 text-sm font-medium">
                         Last Name <span className="text-red-400">*</span>
                       </label>
-                      <Input
-                        id="lastName"
-                        name="lastName"
-                        type="text"
-                        value={formData.lastName}
-                        onChange={handleInputChange}
+                        <Input
+                          id="lastName"
+                          name="lastName"
+                          type="text"
+                          value={formData.lastName}
+                          onChange={handleInputChange}
                         placeholder="Enter last name"
                         className={`bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus:border-cyan-500 focus:ring-cyan-500/20 transition-all ${
-                          errors.lastName ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''
-                        }`}
-                        required
-                      />
+                            errors.lastName ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''
+                          }`}
+                          required
+                        />
                       {errors.lastName && (
                         <p className="text-red-400 text-xs mt-1 flex items-center gap-1">
                           <span>⚠</span> {errors.lastName}
@@ -259,18 +257,18 @@ export default function RegisterPage({ onRegister, onSwitchToLogin }: RegisterPa
                     <label htmlFor="email" className="text-slate-300 text-sm font-medium">
                       Email Address <span className="text-red-400">*</span>
                     </label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
                       placeholder="you@example.com"
                       className={`bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus:border-cyan-500 focus:ring-cyan-500/20 transition-all ${
-                        errors.email ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''
-                      }`}
-                      required
-                    />
+                          errors.email ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20' : ''
+                        }`}
+                        required
+                      />
                     {errors.email && (
                       <p className="text-red-400 text-xs mt-1 flex items-center gap-1">
                         <span>⚠</span> {errors.email}

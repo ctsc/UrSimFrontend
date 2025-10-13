@@ -5,11 +5,7 @@ import { Card } from './ui/card';
 import { TrendingUp, Eye, EyeOff, ArrowRight, Sparkles } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useAuth } from '../contexts/AuthContext';
-
-interface LoginPageProps {
-  onLogin: () => void;
-  onSwitchToRegister: () => void;
-}
+import type { LoginPageProps, FirebaseError } from '../types';
 
 export default function LoginPage({ onLogin, onSwitchToRegister }: LoginPageProps) {
   const [formData, setFormData] = useState({
@@ -29,19 +25,20 @@ export default function LoginPage({ onLogin, onSwitchToRegister }: LoginPageProp
     try {
       await login(formData.email, formData.password);
       onLogin();
-    } catch (err: any) {
-      console.error('Login error:', err);
+    } catch (err) {
+      const error = err as FirebaseError;
+      console.error('Login error:', error);
       // Provide user-friendly error messages
-      if (err.code === 'auth/invalid-credential') {
+      if (error.code === 'auth/invalid-credential') {
         setError('Invalid email or password. Please try again.');
-      } else if (err.code === 'auth/user-not-found') {
+      } else if (error.code === 'auth/user-not-found') {
         setError('No account found with this email.');
-      } else if (err.code === 'auth/wrong-password') {
+      } else if (error.code === 'auth/wrong-password') {
         setError('Incorrect password. Please try again.');
-      } else if (err.code === 'auth/too-many-requests') {
+      } else if (error.code === 'auth/too-many-requests') {
         setError('Too many failed attempts. Please try again later.');
       } else {
-        setError(err.message || 'Failed to login. Please try again.');
+        setError(error.message || 'Failed to login. Please try again.');
       }
     } finally {
       setIsLoading(false);
@@ -55,9 +52,10 @@ export default function LoginPage({ onLogin, onSwitchToRegister }: LoginPageProp
     try {
       await loginWithGoogle();
       onLogin();
-    } catch (err: any) {
-      console.error('Google login error:', err);
-      setError(err.message || 'Failed to login with Google. Please try again.');
+    } catch (err) {
+      const error = err as FirebaseError;
+      console.error('Google login error:', error);
+      setError(error.message || 'Failed to login with Google. Please try again.');
     } finally {
       setIsLoading(false);
     }

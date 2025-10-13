@@ -24,6 +24,7 @@ import {
   DropdownMenuTrigger,
 } from './ui/dropdown-menu';
 import { DashboardLoader } from './SkeletonLoader';
+import type { DashboardProps } from '../types';
 
 // Lazy load dashboard components for better performance
 const LineupBuilder = lazy(() => import('./LineupBuilder'));
@@ -31,10 +32,6 @@ const PropBetFinder = lazy(() => import('./PropBetFinder'));
 const DashboardOverview = lazy(() => import('./DashboardOverview'));
 const GameAnalysis = lazy(() => import('./GameAnalysis'));
 const PopularParlays = lazy(() => import('./PopularParlays'));
-
-interface DashboardProps {
-  onLogout: () => void;
-}
 
 export default function Dashboard({ onLogout }: DashboardProps) {
   const [selectedSport, setSelectedSport] = useState('NFL');

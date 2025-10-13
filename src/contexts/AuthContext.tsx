@@ -85,14 +85,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       // Try popup first
       await signInWithPopup(auth, provider);
-    } catch (error: any) {
+    } catch (err) {
       // If popup fails or is blocked, fallback to redirect
+      const error = err as { code?: string };
       if (error.code === 'auth/popup-blocked' || error.code === 'auth/cancelled-popup-request') {
         console.log('Popup blocked, using redirect instead');
         const { signInWithRedirect } = await import('firebase/auth');
         await signInWithRedirect(auth, provider);
       } else {
-        throw error;
+        throw err;
       }
     }
   };

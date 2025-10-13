@@ -1,314 +1,323 @@
+# UrSim DFS Optimizer
 
-  # UrSim DFS Optimizer
+A modern, high-performance daily fantasy sports optimizer built with React, TypeScript, and Firebase.
 
+---
 
+## 🚀 Quick Start
 
-  ## Running the code
+### Prerequisites
+- Node.js 18+ and npm
+- Firebase account
+- Your backend API (if applicable)
 
-  Run `npm i` to install the dependencies.
+### Installation
 
-  Run `npm run dev` to start the development server.
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/ctsc/UrSimFrontend.git
+   cd UrSimFrontend
+   ```
 
-  ## Commit Information
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-  ### Latest: Firebase Authentication & UI/UX Improvements
+3. **Set up environment variables:**
+   ```bash
+   # Copy the example file
+   cp .env.example .env
+   
+   # Edit .env with your Firebase credentials
+   # Get these from Firebase Console: https://console.firebase.google.com/project/ursim-8ce06
+   ```
 
-  **Firebase Authentication Integration:**
-  - Integrated Firebase Authentication for user management
-  - Implemented email/password authentication with secure token handling
-  - Added Google Sign-In with popup and redirect fallback support
-  - Created AuthContext for centralized authentication state management
-  - Added auto-redirect on auth state changes
-  - Implemented password reset functionality
-  - Added user profile management with display names
-  - Configured Firebase SDK with environment variables for security
+4. **Start development server:**
+   ```bash
+   npm run dev
+   ```
 
-  **UI/UX Improvements:**
-  - Removed cluttered input field icons for cleaner design
-  - Added required field indicators (* in red) on forms
-  - Improved placeholder text to be more descriptive and helpful
-  - Enhanced error messages with visual warning indicators (⚠)
-  - Added smooth transition animations on all form inputs
-  - Improved "Forgot password?" placement next to password field
-  - Enhanced "Remember me" feature with duration indicator
-  - Added accessibility improvements (aria-labels, focus states)
-  - Improved form validation feedback with better error styling
+5. **Open your browser:**
+   ```
+   http://localhost:3001
+   ```
 
-  **Authentication Features:**
-  - Secure email/password registration with Firebase
-  - Google Sign-In integration with fallback to redirect
-  - Automatic session management and persistence
-  - Error handling with user-friendly messages
-  - Loading states during authentication processes
-  - Protected routes based on authentication status
-  - Logout functionality with proper cleanup
+---
 
-  **Security Enhancements:**
-  - Environment variables for Firebase credentials
-  - Secure token storage with Firebase SDK
-  - Input validation on all form fields
-  - Password strength requirements (8+ characters)
-  - Error code handling for common auth issues
+## 📁 Project Structure
 
-  **Files Modified:**
-  - `src/App.tsx` - Added auth state management and auto-navigation
-  - `src/main.tsx` - Wrapped app with AuthProvider
-  - `src/components/LoginPage.tsx` - Integrated Firebase auth, improved UI
-  - `src/components/RegisterPage.tsx` - Integrated Firebase auth, removed icons
-  - `package.json` - Added Firebase dependency
+```
+UrSimFrontend/
+├── src/
+│   ├── components/          # React components
+│   │   ├── ui/             # Shadcn/Radix UI components
+│   │   ├── Dashboard.tsx   # Main dashboard
+│   │   ├── Homepage.tsx    # Landing page
+│   │   ├── LoginPage.tsx   # Login page
+│   │   ├── RegisterPage.tsx # Registration page
+│   │   ├── ErrorBoundary.tsx # Error handling
+│   │   └── SkeletonLoader.tsx # Loading states
+│   ├── contexts/           # React contexts
+│   │   └── AuthContext.tsx # Firebase auth state
+│   ├── firebase/           # Firebase configuration
+│   │   └── config.ts       # Firebase init
+│   ├── styles/            # Global styles
+│   ├── App.tsx            # Main app component
+│   ├── main.tsx           # App entry point
+│   └── index.css          # Tailwind + custom CSS
+├── .env                   # Environment variables (DO NOT COMMIT)
+├── .env.example          # Environment template (COMMIT THIS)
+├── package.json          # Dependencies
+└── vite.config.ts        # Vite configuration
+```
 
-  **Files Created:**
-  - `src/firebase/config.ts` - Firebase initialization and configuration
-  - `src/contexts/AuthContext.tsx` - Authentication context and hooks
-  - `.env.example` - Environment variable template
-  - `.env` - Local environment variables (not committed)
+---
 
-  ---
+## 🛠️ Development Guide for Team Members
 
-  ### Previous: Performance Optimizations & Error Handling
+### Making Changes
 
-  **Performance Optimizations:**
-  - Implemented lazy loading for all route components (Homepage, Dashboard, Login, Register)
-  - Added lazy loading for dashboard sub-components with Suspense boundaries
-  - Optimized Vite build config with Terser minification and code splitting
-  - Added manual chunk splitting for better caching (react-vendor, ui-components, charts, motion, icons)
-  - Throttled Homepage mouse tracking with requestAnimationFrame for smoother animations
-  - Added useMemo to Dashboard for optimized rendering
-  - Added CSS performance optimizations (will-change, GPU acceleration, smooth scrolling)
-  - Configured optimizeDeps for faster development builds
+1. **Create a new branch:**
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
 
-  **Error Handling:**
-  - Created ErrorBoundary component with beautiful error recovery UI
-  - Wrapped entire app with ErrorBoundary for top-level error protection
-  - Added error recovery options (Try Again, Go to Homepage buttons)
-  - Shows error details in expandable section for debugging
+2. **Make your changes** in the appropriate files
 
-  **Loading States:**
-  - Created SkeletonLoader components (SimpleLoader, DashboardLoader, SkeletonLoader)
-  - Added loading fallbacks to all lazy-loaded components
-  - Implemented Suspense boundaries throughout the app for better UX
+3. **Test locally:**
+   ```bash
+   npm run dev
+   ```
 
-  **Expected Performance Results:**
-  - 30-40% bundle size reduction through code splitting
-  - 50-60% faster initial load time with lazy loading
-  - 20-30% runtime performance improvement with memoization
-  - Smoother animations and better user experience
-  - Better caching for returning users
+4. **Commit your changes:**
+   ```bash
+   git add .
+   git commit -m "feat: description of your changes"
+   ```
 
-  **Files Modified:**
-  - `src/App.tsx` - Added lazy loading and Suspense
-  - `src/components/Dashboard.tsx` - Added lazy loading, useMemo, Suspense
-  - `src/components/Homepage.tsx` - Throttled mouse tracking
-  - `src/main.tsx` - Wrapped with ErrorBoundary
-  - `vite.config.ts` - Production optimizations and code splitting
-  - `src/index.css` - Performance CSS optimizations
+5. **Push and create Pull Request:**
+   ```bash
+   git push origin feature/your-feature-name
+   ```
 
-  **Files Created:**
-  - `src/components/ErrorBoundary.tsx` - Error handling component
-  - `src/components/SkeletonLoader.tsx` - Loading state components
+### Common Tasks
 
-  ## To Do: Production Deployment Checklist
+**Adding a new component:**
+```bash
+# Create in src/components/
+# Import in parent component
+# Use lazy loading if it's a large component
+```
 
-  ### 🔴 Critical (Must Have Before Launch)
+**Updating styles:**
+```bash
+# Use Tailwind classes directly in components
+# Add custom CSS to src/index.css if needed
+```
 
-  **Backend Integration:**
-  - [ ] Connect to backend API endpoints
-  - [ ] Implement authentication flow (login/register with JWT or session tokens)
-  - [ ] Add API error handling and retry logic
-  - [ ] Implement secure token storage (httpOnly cookies or secure localStorage)
-  - [ ] Add CORS configuration for production domain
-  - [ ] Set up environment variables for API URLs (.env.production)
-  - [ ] Add request/response interceptors for auth tokens
-  - [ ] Implement logout functionality with backend session cleanup
+**Adding a new page/route:**
+```bash
+# 1. Create component in src/components/
+# 2. Add lazy import in App.tsx
+# 3. Add route logic in App.tsx
+```
 
-  **Security:**
-  - [ ] Add input validation and sanitization on all forms
-  - [ ] Implement rate limiting on API calls
-  - [ ] Add CSRF protection
-  - [ ] Sanitize user-generated content (XSS prevention)
-  - [ ] Implement proper authentication guards on protected routes
-  - [ ] Add password strength requirements
-  - [ ] Set up Content Security Policy (CSP) headers
-  - [ ] Enable HTTPS only in production
-  - [ ] Remove all console.logs and debug code
+**Connecting to backend API:**
+```bash
+# 1. Add API URL to .env
+# 2. Create API service in src/services/ (recommended)
+# 3. Use in components with proper error handling
+```
 
-  **Core Functionality:**
-  - [ ] Connect dashboard components to real data from backend
-  - [ ] Implement actual lineup optimization logic
-  - [ ] Connect prop bet finder to live data
-  - [ ] Implement game analysis with real statistics
-  - [ ] Add real-time data updates (WebSocket or polling)
-  - [ ] Implement data caching strategy
-  - [ ] Add proper loading states for all data fetches
-  - [ ] Handle empty states (no data scenarios)
+---
 
-  **Testing:**
-  - [ ] Add unit tests for critical components
-  - [ ] Add integration tests for user flows
-  - [ ] Test on multiple browsers (Chrome, Firefox, Safari, Edge)
-  - [ ] Test on mobile devices (iOS Safari, Android Chrome)
-  - [ ] Test with slow network connections
-  - [ ] Test error scenarios and edge cases
-  - [ ] Verify all forms work correctly
-  - [ ] Test authentication flow end-to-end
+## 🔥 Firebase Setup
 
-  ### 🟡 Important (Should Have for Good UX)
+### First-Time Setup
 
-  **User Experience:**
-  - [ ] Add toast notifications for user actions (success/error messages)
-  - [ ] Implement form validation with helpful error messages
-  - [ ] Add loading indicators for all async operations
-  - [ ] Implement infinite scroll or pagination where needed
-  - [ ] Add search functionality
-  - [ ] Implement filters and sorting options
-  - [ ] Add keyboard shortcuts for power users
-  - [ ] Implement "Remember Me" functionality
-  - [ ] Add password reset flow
-  - [ ] Create email verification system
+1. **Go to Firebase Console:** https://console.firebase.google.com/project/ursim-8ce06
 
-  **SEO & Marketing:**
-  - [ ] Add proper meta tags (title, description, keywords)
-  - [ ] Implement Open Graph tags for social sharing
-  - [ ] Add Twitter Card tags
-  - [ ] Create sitemap.xml
-  - [ ] Add robots.txt
-  - [ ] Implement Google Analytics or similar
-  - [ ] Add structured data (JSON-LD) for search engines
-  - [ ] Optimize images (lazy loading, WebP format)
-  - [ ] Create 404 error page
-  - [ ] Add favicon and app icons (various sizes)
-  - [ ] Implement sharing functionality
+2. **Enable Authentication:**
+   - Navigate to **Authentication** → **Sign-in method**
+   - Enable **Email/Password**
+   - Enable **Google** (optional)
 
-  **Performance:**
-  - [ ] Add service worker for offline support (PWA)
-  - [ ] Implement image optimization (compression, WebP)
-  - [ ] Add CDN for static assets
-  - [ ] Implement browser caching strategy
-  - [ ] Optimize font loading (font-display: swap)
-  - [ ] Reduce third-party script impact
-  - [ ] Add performance monitoring (Lighthouse CI)
-  - [ ] Implement lazy loading for images
-  - [ ] Optimize bundle size (analyze with webpack-bundle-analyzer)
+3. **Get Your Config:**
+   - Go to **Project Settings** → **Your apps**
+   - Copy the Firebase config
+   - Add to `.env` file
 
-  **Accessibility (A11y):**
-  - [ ] Add proper ARIA labels
-  - [ ] Ensure keyboard navigation works everywhere
-  - [ ] Test with screen readers
-  - [ ] Add skip-to-content links
-  - [ ] Ensure color contrast meets WCAG AA standards
-  - [ ] Add alt text to all images
-  - [ ] Implement focus management
-  - [ ] Test with reduced motion preferences
+4. **Add Authorized Domains:**
+   - In Authentication → Settings → Authorized domains
+   - Add your production domain when deploying
 
-  ### 🟢 Nice to Have (Enhancement)
+---
 
-  **Features:**
-  - [ ] Add dark/light theme toggle
-  - [ ] Implement user preferences/settings
-  - [ ] Add export functionality (CSV, PDF)
-  - [ ] Implement print-friendly views
-  - [ ] Add tutorial/onboarding flow for new users
-  - [ ] Create help documentation/FAQ
-  - [ ] Add user profile management
-  - [ ] Implement notification system
-  - [ ] Add comparison features
-  - [ ] Create saved lineups/favorites functionality
+## 📦 Building for Production
 
-  **Monitoring & Analytics:**
-  - [ ] Set up error tracking (Sentry, Bugsnag, etc.)
-  - [ ] Implement user analytics
-  - [ ] Add conversion tracking
-  - [ ] Set up uptime monitoring
-  - [ ] Create performance dashboards
-  - [ ] Implement A/B testing framework
-  - [ ] Add user feedback mechanism
-  - [ ] Track feature usage metrics
+### Build the app:
+```bash
+npm run build
+```
 
-  **DevOps & Deployment:**
-  - [ ] Set up CI/CD pipeline (GitHub Actions, etc.)
-  - [ ] Configure automatic deployments
-  - [ ] Set up staging environment
-  - [ ] Implement blue-green deployment
-  - [ ] Add automated testing in CI
-  - [ ] Set up monitoring and alerts
-  - [ ] Configure backup strategy
-  - [ ] Document deployment process
+This creates optimized production files in the `build/` folder.
 
-  **Legal & Compliance:**
-  - [ ] Add Terms of Service page
-  - [ ] Add Privacy Policy page
-  - [ ] Implement cookie consent banner (GDPR)
-  - [ ] Add CCPA compliance if targeting California
-  - [ ] Create refund/cancellation policy
-  - [ ] Add contact/support page
-  - [ ] Implement data export for users (GDPR)
-  - [ ] Add age verification if required
+### Test production build locally:
+```bash
+npm run preview
+```
 
-  **Mobile:**
-  - [ ] Create responsive design for all pages
-  - [ ] Test on various screen sizes (320px to 2560px)
-  - [ ] Add touch-friendly interactions
-  - [ ] Optimize for mobile performance
-  - [ ] Test on real devices
-  - [ ] Add mobile-specific features (pull-to-refresh, etc.)
-  - [ ] Implement app-like behavior (PWA)
+---
 
-  **Payment Integration (If Applicable):**
-  - [ ] Integrate payment processor (Stripe, PayPal, etc.)
-  - [ ] Implement subscription management
-  - [ ] Add billing history
-  - [ ] Create invoice generation
-  - [ ] Implement promo code system
-  - [ ] Add payment failure handling
-  - [ ] Set up webhook handlers for payment events
-  - [ ] Implement refund process
+## 🚀 Deployment
 
-  ### 📋 Pre-Launch Checklist
+### Option 1: Vercel (Recommended - Fastest)
 
-  **Final Verification:**
-  - [ ] Run full test suite
-  - [ ] Perform security audit
-  - [ ] Check all links work
-  - [ ] Verify all images load
-  - [ ] Test all forms
-  - [ ] Run Lighthouse audit (aim for 90+ scores)
-  - [ ] Test on production-like environment
-  - [ ] Verify analytics tracking works
-  - [ ] Test error reporting
-  - [ ] Check mobile responsiveness
-  - [ ] Verify SEO meta tags
-  - [ ] Test loading times
-  - [ ] Verify SSL certificate
-  - [ ] Test with ad blockers
-  - [ ] Check accessibility compliance
+1. **Install Vercel CLI:**
+   ```bash
+   npm install -g vercel
+   ```
 
-  **Launch Day:**
-  - [ ] Monitor error rates
-  - [ ] Watch server performance
-  - [ ] Monitor user analytics
-  - [ ] Have rollback plan ready
-  - [ ] Monitor social media mentions
-  - [ ] Be ready for support requests
-  - [ ] Track conversion rates
+2. **Deploy:**
+   ```bash
+   vercel --prod
+   ```
 
-  ### 🚀 Post-Launch
+3. **Set environment variables** in Vercel dashboard
 
-  **Optimization:**
-  - [ ] Analyze user behavior and optimize flows
-  - [ ] A/B test landing pages
-  - [ ] Optimize conversion funnels
-  - [ ] Improve SEO based on analytics
-  - [ ] Gather and implement user feedback
-  - [ ] Continuously monitor and improve performance
-  - [ ] Regular security updates
-  - [ ] Keep dependencies up to date
+### Option 2: Netlify
 
-  **Growth:**
-  - [ ] Implement referral program
-  - [ ] Add social proof (testimonials, reviews)
-  - [ ] Create content marketing strategy
-  - [ ] Build email marketing campaigns
-  - [ ] Engage with community
-  - [ ] Monitor competitors
-  - [ ] Iterate based on data
-  
+1. **Build the app:**
+   ```bash
+   npm run build
+   ```
+
+2. **Drag `build/` folder to Netlify** or use CLI:
+   ```bash
+   npm install -g netlify-cli
+   netlify deploy --prod --dir=build
+   ```
+
+3. **Set environment variables** in Netlify dashboard
+
+### Option 3: Traditional Hosting
+
+1. Build: `npm run build`
+2. Upload `build/` folder to your server
+3. Configure server for SPA (redirect all routes to index.html)
+
+---
+
+## 🔧 Environment Variables
+
+**Required for production:**
+
+```env
+VITE_FIREBASE_API_KEY=your_key_here
+VITE_FIREBASE_AUTH_DOMAIN=your_domain_here
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_bucket_here
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
+```
+
+**Never commit the `.env` file to Git!** ⚠️
+
+---
+
+## 🧪 Testing
+
+### Manual Testing Checklist:
+- [ ] Test signup with email/password
+- [ ] Test login with email/password
+- [ ] Test Google Sign-In
+- [ ] Test logout
+- [ ] Test on mobile device
+- [ ] Test on different browsers
+- [ ] Test with slow network
+- [ ] Test error scenarios
+
+### Browser Support:
+- Chrome 90+ ✅
+- Firefox 88+ ✅
+- Safari 14+ ✅
+- Edge 90+ ✅
+
+---
+
+## 🐛 Troubleshooting
+
+### "Firebase: Error (auth/configuration-not-found)"
+- Enable Email/Password auth in Firebase Console
+
+### "Firebase: Error (auth/popup-blocked)"
+- Allow popups for your domain
+- Code will auto-fallback to redirect method
+
+### "Cannot connect to backend API"
+- Check your API URL in `.env`
+- Verify CORS is configured on backend
+- Check network tab for error details
+
+### App won't start
+```bash
+# Delete node_modules and reinstall
+rm -rf node_modules package-lock.json
+npm install
+```
+
+---
+
+## 📚 Additional Documentation
+
+- **[TIMELINE.md](./TIMELINE.md)** - Development roadmap and task timeline
+- **[COMMITS.md](./COMMITS.md)** - Detailed commit history and changes
+- **[Firebase Console](https://console.firebase.google.com/project/ursim-8ce06)** - Manage authentication
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'feat: Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is proprietary and confidential.
+
+---
+
+## 🆘 Need Help?
+
+- Check [TIMELINE.md](./TIMELINE.md) for development roadmap
+- Check [COMMITS.md](./COMMITS.md) for what's been implemented
+- Open an issue on GitHub
+- Contact the team lead
+
+---
+
+## ⚡ Performance
+
+This app is optimized for production with:
+- Code splitting and lazy loading
+- Optimized bundle sizes
+- Firebase authentication
+- Error boundaries
+- Loading states
+- Mobile responsive design
+
+**Target Metrics:**
+- Lighthouse Score: 90+
+- Load Time: <2 seconds
+- Time to Interactive: <3 seconds
+
+---
+
+**Built with ❤️ for DFS players**

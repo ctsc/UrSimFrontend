@@ -4,12 +4,9 @@ import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
+import type { DashboardOverviewProps, Game, PropBet } from '../types';
 
-interface DashboardOverviewProps {
-  sport: string;
-}
-
-const todaysGames = [
+const todaysGames: Game[] = [
   { id: 1, home: 'Kansas City Chiefs', away: 'LA Chargers', time: '8:20 PM ET', spread: 'KC -3.5', total: 'O/U 52.5', edge: '+8.2%', status: 'live' },
   { id: 2, home: 'Buffalo Bills', away: 'Miami Dolphins', time: '1:00 PM ET', spread: 'BUF -7', total: 'O/U 48.5', edge: '+6.5%', status: 'upcoming' },
   { id: 3, home: 'San Francisco 49ers', away: 'Dallas Cowboys', time: '4:25 PM ET', spread: 'SF -5.5', total: 'O/U 45.5', edge: '+5.1%', status: 'upcoming' },
@@ -17,7 +14,7 @@ const todaysGames = [
   { id: 5, home: 'Seattle Seahawks', away: 'Arizona Cardinals', time: '4:05 PM ET', spread: 'SEA -3', total: 'O/U 50.5', edge: '+3.9%', status: 'upcoming' },
 ];
 
-const topPlayerProps = [
+const topPlayerProps: PropBet[] = [
   { player: 'Patrick Mahomes', team: 'KC', position: 'QB', prop: 'Passing Yards O287.5', edge: '+8.2%', confidence: 95, matchup: 'vs LAC' },
   { player: 'Christian McCaffrey', team: 'SF', position: 'RB', prop: 'Rush Yards O95.5', edge: '+7.5%', confidence: 92, matchup: '@ DAL' },
   { player: 'Tyreek Hill', team: 'MIA', position: 'WR', prop: 'Rec Yards O82.5', edge: '+6.8%', confidence: 88, matchup: '@ BUF' },

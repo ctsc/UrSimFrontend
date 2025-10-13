@@ -3,11 +3,7 @@ import { Card } from './ui/card';
 import { TrendingUp, Target, BarChart3, Shield, CheckCircle, ArrowRight, Sparkles, Zap, Code } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useEffect, useState, useCallback } from 'react';
-
-interface HomepageProps {
-  onLogin: () => void;
-  onSignUp: () => void;
-}
+import type { HomepageProps } from '../types';
 
 export default function Homepage({ onLogin, onSignUp }: HomepageProps) {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
