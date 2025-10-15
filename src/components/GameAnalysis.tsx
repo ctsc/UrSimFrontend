@@ -71,7 +71,7 @@ export default function GameAnalysis({ sport }: GameAnalysisProps) {
       </div>
 
       {/* Featured Game */}
-      <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-cyan-500/20 p-6">
+      <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6">
         <div className="flex items-center justify-between mb-6">
           <div>
             <Badge className="bg-red-500/10 text-red-400 border-red-500/30 mb-2">
@@ -89,17 +89,17 @@ export default function GameAnalysis({ sport }: GameAnalysisProps) {
         </div>
 
         <div className="grid md:grid-cols-3 gap-4">
-          <div className="bg-slate-800/50 border border-slate-700/50 rounded-lg p-4">
+          <div className="bg-black/30 border border-cyan-500/20 rounded-lg p-4">
             <div className="text-slate-400 text-sm mb-1">Spread</div>
             <div className="text-white text-xl">KC -3.5</div>
             <div className="text-cyan-400 text-sm mt-1">59% betting KC</div>
           </div>
-          <div className="bg-slate-800/50 border border-slate-700/50 rounded-lg p-4">
+          <div className="bg-black/30 border border-cyan-500/20 rounded-lg p-4">
             <div className="text-slate-400 text-sm mb-1">Total</div>
             <div className="text-white text-xl">O/U 52.5</div>
             <div className="text-blue-400 text-sm mt-1">Model: 54.8 pts</div>
           </div>
-          <div className="bg-slate-800/50 border border-slate-700/50 rounded-lg p-4">
+          <div className="bg-black/30 border border-cyan-500/20 rounded-lg p-4">
             <div className="text-slate-400 text-sm mb-1">Moneyline</div>
             <div className="text-white text-xl">KC -165</div>
             <div className="text-purple-400 text-sm mt-1">LAC +140</div>
@@ -108,14 +108,14 @@ export default function GameAnalysis({ sport }: GameAnalysisProps) {
       </Card>
 
       <Tabs defaultValue="props" className="w-full">
-        <TabsList className="bg-slate-800 border-slate-700">
+        <TabsList className="bg-black/50 border-cyan-500/20">
           <TabsTrigger value="props">Player Props</TabsTrigger>
           <TabsTrigger value="matchup">Team Matchup</TabsTrigger>
           <TabsTrigger value="trends">Trends & History</TabsTrigger>
         </TabsList>
 
         <TabsContent value="props" className="space-y-4">
-          <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-cyan-500/20 p-6">
+          <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-white">Top Value Props</h3>
               <Button variant="outline" className="border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10">
@@ -182,7 +182,7 @@ export default function GameAnalysis({ sport }: GameAnalysisProps) {
 
         <TabsContent value="matchup" className="space-y-4">
           <div className="grid md:grid-cols-2 gap-6">
-            <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-cyan-500/20 p-6">
+            <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6">
               <h3 className="text-white mb-6">Team Comparison Radar</h3>
               <ChartContainer config={chartConfig} className="h-[300px] w-full">
                 <RadarChart data={teamStats}>
@@ -196,7 +196,7 @@ export default function GameAnalysis({ sport }: GameAnalysisProps) {
               </ChartContainer>
             </Card>
 
-            <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-blue-500/20 p-6">
+            <Card className="bg-black/40 backdrop-blur-sm border-blue-500/20 p-6">
               <h3 className="text-white mb-6">Key Insights</h3>
               <div className="space-y-4">
                 <div className="flex items-start gap-3 p-3 bg-cyan-500/5 border border-cyan-500/20 rounded-lg">
@@ -233,7 +233,7 @@ export default function GameAnalysis({ sport }: GameAnalysisProps) {
         </TabsContent>
 
         <TabsContent value="trends" className="space-y-4">
-          <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-cyan-500/20 p-6">
+          <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6">
             <div className="flex items-center justify-between mb-6">
               <h3 className="text-white">Head-to-Head History</h3>
               <Badge variant="outline" className="border-cyan-500/30 text-cyan-400">
@@ -253,7 +253,7 @@ export default function GameAnalysis({ sport }: GameAnalysisProps) {
           </Card>
 
           <div className="grid md:grid-cols-3 gap-6">
-            <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-cyan-500/20 p-6">
+            <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6">
               <h3 className="text-white mb-4">Chiefs Trends</h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
@@ -275,7 +275,7 @@ export default function GameAnalysis({ sport }: GameAnalysisProps) {
               </div>
             </Card>
 
-            <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-blue-500/20 p-6">
+            <Card className="bg-black/40 backdrop-blur-sm border-blue-500/20 p-6">
               <h3 className="text-white mb-4">Chargers Trends</h3>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
@@ -297,7 +297,7 @@ export default function GameAnalysis({ sport }: GameAnalysisProps) {
               </div>
             </Card>
 
-            <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-purple-500/20 p-6">
+            <Card className="bg-black/40 backdrop-blur-sm border-purple-500/20 p-6">
               <h3 className="text-white mb-4">Betting Trends</h3>
               <div className="space-y-3">
                 <div>

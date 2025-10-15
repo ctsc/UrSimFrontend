@@ -1,12 +1,13 @@
+import { useState } from 'react';
 import { Card } from './ui/card';
-import { Input } from './ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './ui/table';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { TrendingUp, Filter, Download, Activity, Star, AlertCircle } from 'lucide-react';
+import { TrendingUp, Download, Activity, Star, AlertCircle, Users, Target, Copy, Flame } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from './ui/chart';
+import AdvancedFilters from './AdvancedFilters';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 
 interface PropBetFinderProps {
   sport: string;
@@ -114,15 +115,45 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
+// Popular Stacks Data (from PopularParlays)
+const parlaysByPosition = {
+  QB: [
+    { id: 1, players: ['Patrick Mahomes O287.5 Pass Yds', 'Josh Allen O2.5 Pass TDs'], odds: '+265', popularity: 92, edge: '+8.2%', legs: 2 },
+    { id: 2, players: ['Patrick Mahomes O287.5 Pass Yds', 'Josh Allen O2.5 Pass TDs', 'Lamar Jackson O45.5 Rush Yds'], odds: '+485', popularity: 78, edge: '+6.5%', legs: 3 },
+  ],
+  RB: [
+    { id: 3, players: ['Christian McCaffrey O95.5 Rush Yds', 'Saquon Barkley O75.5 Rush Yds'], odds: '+310', popularity: 88, edge: '+7.1%', legs: 2 },
+    { id: 4, players: ['Christian McCaffrey O95.5 Rush Yds', 'Derrick Henry O85.5 Rush Yds', 'Nick Chubb O70.5 Rush Yds'], odds: '+520', popularity: 75, edge: '+5.8%', legs: 3 },
+  ],
+  WR: [
+    { id: 5, players: ['Tyreek Hill O82.5 Rec Yds', 'Justin Jefferson O75.5 Rec Yds'], odds: '+280', popularity: 85, edge: '+6.9%', legs: 2 },
+    { id: 6, players: ['Tyreek Hill O82.5 Rec Yds', 'CeeDee Lamb O70.5 Rec Yds', 'Amon-Ra St. Brown O65.5 Rec Yds'], odds: '+495', popularity: 71, edge: '+5.2%', legs: 3 },
+  ],
+  TE: [
+    { id: 7, players: ['Travis Kelce O5.5 Rec', 'Mark Andrews O4.5 Rec'], odds: '+245', popularity: 80, edge: '+7.5%', legs: 2 },
+  ],
+};
+
+const teamStacks = [
+  { id: 1, team: 'Kansas City Chiefs', players: ['Patrick Mahomes O287.5 Pass Yds', 'Travis Kelce O5.5 Rec', 'Isiah Pacheco O60.5 Rush Yds'], odds: '+425', popularity: 94, edge: '+8.8%', legs: 3 },
+  { id: 2, team: 'Buffalo Bills', players: ['Josh Allen O2.5 Pass TDs', 'Stefon Diggs O75.5 Rec Yds'], odds: '+290', popularity: 87, edge: '+7.2%', legs: 2 },
+  { id: 3, team: 'San Francisco 49ers', players: ['Christian McCaffrey O95.5 Rush Yds', 'Deebo Samuel O65.5 Rec Yds', 'George Kittle O50.5 Rec Yds'], odds: '+510', popularity: 82, edge: '+6.5%', legs: 3 },
+  { id: 4, team: 'Philadelphia Eagles', players: ['Jalen Hurts O1.5 Rush TDs', 'AJ Brown O80.5 Rec Yds'], odds: '+315', popularity: 79, edge: '+6.1%', legs: 2 },
+];
+
 export default function PropBetFinder({ sport }: PropBetFinderProps) {
+  const [mainTab, setMainTab] = useState<'props' | 'stacks'>('props');
+  const [selectedPosition, setSelectedPosition] = useState<keyof typeof parlaysByPosition>('QB');
+  const [filterLegs, setFilterLegs] = useState('all');
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-white mb-2 bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
-            Prop Bet Analyzer
+            Player Props & Stacks
           </h1>
-          <p className="text-slate-400">AI-powered player prop analysis with real-time edge detection</p>
+          <p className="text-slate-400">AI-powered analysis with edge detection and popular stacking strategies</p>
         </div>
         <div className="flex items-center gap-2">
           <Badge className="bg-cyan-500/10 text-cyan-400 border-cyan-500/30">
@@ -132,9 +163,19 @@ export default function PropBetFinder({ sport }: PropBetFinderProps) {
         </div>
       </div>
 
+      {/* Main Tabs - Props vs Stacks */}
+      <Tabs value={mainTab} onValueChange={(v) => setMainTab(v as 'props' | 'stacks')} className="w-full">
+        <TabsList className="bg-black/50 border-cyan-500/20 grid w-full grid-cols-2">
+          <TabsTrigger value="props">Individual Props</TabsTrigger>
+          <TabsTrigger value="stacks">Popular Stacks</TabsTrigger>
+        </TabsList>
+
+        {/* INDIVIDUAL PROPS TAB */}
+        <TabsContent value="props" className="space-y-6 mt-6">
+
       {/* Stats Cards */}
       <div className="grid md:grid-cols-4 gap-6">
-        <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-cyan-500/20 p-6 relative overflow-hidden group hover:border-cyan-400/40 transition-all">
+        <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6 relative overflow-hidden group hover:border-cyan-400/40 transition-all hover:shadow-[0_0_30px_rgba(6,182,212,0.15)]">
           <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <div className="relative">
             <div className="flex items-center justify-between mb-2">
@@ -148,7 +189,7 @@ export default function PropBetFinder({ sport }: PropBetFinderProps) {
           </div>
         </Card>
 
-        <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-blue-500/20 p-6 relative overflow-hidden group hover:border-blue-400/40 transition-all">
+        <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6 relative overflow-hidden group hover:border-cyan-400/40 transition-all hover:shadow-[0_0_30px_rgba(59,130,246,0.15)]">
           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <div className="relative">
             <div className="flex items-center justify-between mb-2">
@@ -162,7 +203,7 @@ export default function PropBetFinder({ sport }: PropBetFinderProps) {
           </div>
         </Card>
 
-        <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-purple-500/20 p-6 relative overflow-hidden group hover:border-purple-400/40 transition-all">
+        <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6 relative overflow-hidden group hover:border-cyan-400/40 transition-all hover:shadow-[0_0_30px_rgba(147,51,234,0.15)]">
           <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <div className="relative">
             <div className="flex items-center justify-between mb-2">
@@ -176,7 +217,7 @@ export default function PropBetFinder({ sport }: PropBetFinderProps) {
           </div>
         </Card>
 
-        <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-pink-500/20 p-6 relative overflow-hidden group hover:border-pink-400/40 transition-all">
+        <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6 relative overflow-hidden group hover:border-cyan-400/40 transition-all hover:shadow-[0_0_30px_rgba(236,72,153,0.15)]">
           <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <div className="relative">
             <div className="flex items-center justify-between mb-2">
@@ -192,7 +233,7 @@ export default function PropBetFinder({ sport }: PropBetFinderProps) {
       </div>
 
       {/* Edge Distribution Chart */}
-      <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-cyan-500/20 p-6">
+      <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6 shadow-[0_0_30px_rgba(6,182,212,0.1)]">
         <h3 className="text-white mb-6">Edge Distribution</h3>
         <ChartContainer config={chartConfig} className="h-[200px] w-full">
           <BarChart data={edgeDistribution}>
@@ -211,37 +252,21 @@ export default function PropBetFinder({ sport }: PropBetFinderProps) {
         </ChartContainer>
       </Card>
 
-      {/* Filters and Table */}
-      <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-cyan-500/20 p-6">
+      {/* Advanced Filters */}
+      <AdvancedFilters
+        showPositionFilters={false}
+        showPriceFilters={false}
+        onFilterChange={(filters) => console.log('Filters changed:', filters)}
+      />
+
+      {/* Props Table */}
+      <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6 shadow-[0_0_30px_rgba(6,182,212,0.1)]">
         <div className="mb-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <h3 className="text-white">Player Props Analysis</h3>
-          <div className="flex items-center gap-3 w-full md:w-auto">
-            <Select defaultValue="all">
-              <SelectTrigger className="bg-slate-800 border-slate-700 text-white w-40">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Props</SelectItem>
-                <SelectItem value="passing">Passing</SelectItem>
-                <SelectItem value="rushing">Rushing</SelectItem>
-                <SelectItem value="receiving">Receiving</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select defaultValue="high">
-              <SelectTrigger className="bg-slate-800 border-slate-700 text-white w-40">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="high">High Edge First</SelectItem>
-                <SelectItem value="confidence">By Confidence</SelectItem>
-                <SelectItem value="hitrate">By Hit Rate</SelectItem>
-              </SelectContent>
-            </Select>
-            <Button variant="outline" className="border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10">
-              <Download className="w-4 h-4 mr-2" />
-              Export
-            </Button>
-          </div>
+          <Button variant="outline" className="border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10">
+            <Download className="w-4 h-4 mr-2" />
+            Export
+          </Button>
         </div>
 
         <div className="overflow-auto">
@@ -330,7 +355,7 @@ export default function PropBetFinder({ sport }: PropBetFinderProps) {
       </Card>
 
       {/* Analysis Insights */}
-      <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-cyan-500/20 p-6">
+      <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6 shadow-[0_0_30px_rgba(6,182,212,0.1)]">
         <h3 className="text-white mb-6">AI Insights & Alerts</h3>
         <div className="grid md:grid-cols-2 gap-4">
           <div className="bg-cyan-500/5 border border-cyan-500/20 p-4 rounded-lg">
@@ -379,6 +404,204 @@ export default function PropBetFinder({ sport }: PropBetFinderProps) {
           </div>
         </div>
       </Card>
+
+      </TabsContent>
+
+      {/* POPULAR STACKS TAB */}
+      <TabsContent value="stacks" className="space-y-6 mt-6">
+        
+        {/* Quick Stats for Stacks */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-2.5 bg-gradient-to-br from-cyan-500/20 to-cyan-600/10 rounded-lg ring-2 ring-cyan-500/30">
+                <Target className="w-5 h-5 text-cyan-400" />
+              </div>
+              <div className="text-xs text-slate-400 uppercase tracking-wider">Total Stacks</div>
+            </div>
+            <div className="text-4xl bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent mb-1">156</div>
+            <div className="text-xs text-cyan-400/80">Tracked today</div>
+          </Card>
+
+          <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-2.5 bg-gradient-to-br from-blue-500/20 to-blue-600/10 rounded-lg ring-2 ring-blue-500/30">
+                <Users className="w-5 h-5 text-blue-400" />
+              </div>
+              <div className="text-xs text-slate-400 uppercase tracking-wider">Avg Popularity</div>
+            </div>
+            <div className="text-4xl bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent mb-1">83%</div>
+            <div className="text-xs text-blue-400/80">User interest</div>
+          </Card>
+
+          <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-2.5 bg-gradient-to-br from-purple-500/20 to-purple-600/10 rounded-lg ring-2 ring-purple-500/30">
+                <TrendingUp className="w-5 h-5 text-purple-400" />
+              </div>
+              <div className="text-xs text-slate-400 uppercase tracking-wider">Best Edge</div>
+            </div>
+            <div className="text-4xl bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent mb-1">+8.8%</div>
+            <div className="text-xs text-purple-400/80">KC stack</div>
+          </Card>
+
+          <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-2.5 bg-gradient-to-br from-pink-500/20 to-pink-600/10 rounded-lg ring-2 ring-pink-500/30 relative">
+                <Flame className="w-5 h-5 text-pink-400" />
+                <div className="absolute -top-1 -right-1 w-2 h-2 bg-pink-500 rounded-full animate-pulse" />
+              </div>
+              <div className="text-xs text-slate-400 uppercase tracking-wider">Hot Stacks</div>
+            </div>
+            <div className="text-4xl bg-gradient-to-r from-pink-400 to-red-500 bg-clip-text text-transparent mb-1">24</div>
+            <div className="text-xs text-pink-400/80">Edge &gt; 7%</div>
+          </Card>
+        </div>
+
+        {/* Stack Tabs */}
+        <Tabs defaultValue="position" className="w-full">
+          <TabsList className="bg-black/50 border-cyan-500/20">
+            <TabsTrigger value="position">By Position</TabsTrigger>
+            <TabsTrigger value="team">Team Stacks</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="position" className="space-y-4 mt-6">
+            <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6 shadow-[0_0_30px_rgba(6,182,212,0.1)]">
+              <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+                <h3 className="text-white">Position-Based Stacks</h3>
+                <div className="flex items-center gap-3">
+                  <select
+                    value={selectedPosition}
+                    onChange={(e) => setSelectedPosition(e.target.value as keyof typeof parlaysByPosition)}
+                    className="bg-black/50 border border-cyan-500/20 rounded-lg px-3 py-2 text-white text-sm"
+                  >
+                    <option value="QB">QB</option>
+                    <option value="RB">RB</option>
+                    <option value="WR">WR</option>
+                    <option value="TE">TE</option>
+                  </select>
+                  <select
+                    value={filterLegs}
+                    onChange={(e) => setFilterLegs(e.target.value)}
+                    className="bg-black/50 border border-cyan-500/20 rounded-lg px-3 py-2 text-white text-sm"
+                  >
+                    <option value="all">All Legs</option>
+                    <option value="2">2-Leg Stacks</option>
+                    <option value="3">3-Leg Stacks</option>
+                    <option value="4">4+ Leg Stacks</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid gap-3">
+                {parlaysByPosition[selectedPosition]
+                  .filter(stack => filterLegs === 'all' || stack.legs.toString() === filterLegs)
+                  .map((stack) => (
+                  <div key={stack.id} className="bg-black/60 border border-cyan-500/20 rounded-lg p-4 hover:border-cyan-400/40 transition-all hover:shadow-[0_0_20px_rgba(6,182,212,0.15)]">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Badge className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 border-cyan-500/40 text-xs px-2 py-0.5">
+                            {stack.legs} Legs
+                          </Badge>
+                          <Badge className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-400 border-purple-500/40 text-xs px-2 py-0.5">
+                            {stack.odds}
+                          </Badge>
+                          <div className="flex items-center gap-1.5 ml-auto">
+                            <Users className="w-3 h-3 text-slate-500" />
+                            <span className="text-xs text-slate-400">{stack.popularity}%</span>
+                          </div>
+                        </div>
+                        <div className="space-y-1.5">
+                          {stack.players.map((player, i) => (
+                            <div key={i} className="flex items-center gap-2 text-sm">
+                              <div className="w-1 h-1 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" />
+                              <span className="text-slate-300">{player}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      <div className="flex flex-col items-end gap-3 flex-shrink-0">
+                        <div className="text-right">
+                          <div className="text-xs text-slate-500 mb-0.5">Edge</div>
+                          <div className="text-2xl bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                            {stack.edge}
+                          </div>
+                        </div>
+                        <Button size="sm" className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-xs h-8 px-3 shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+                          <Copy className="w-3 h-3 mr-1.5" />
+                          Copy
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="team" className="space-y-4 mt-6">
+            <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6 shadow-[0_0_30px_rgba(6,182,212,0.1)]">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-white">Team Stacking Strategies</h3>
+                <Badge variant="outline" className="border-cyan-500/30 text-cyan-400">
+                  {teamStacks.length} Teams
+                </Badge>
+              </div>
+
+              <div className="grid gap-3">
+                {teamStacks.map((stack) => (
+                  <div key={stack.id} className="bg-black/60 border border-cyan-500/20 rounded-lg p-4 hover:border-cyan-400/40 transition-all hover:shadow-[0_0_20px_rgba(6,182,212,0.15)]">
+                    <div className="flex items-start justify-between gap-4 mb-3">
+                      <div className="flex items-center gap-2 flex-1">
+                        <h4 className="text-white font-semibold">{stack.team}</h4>
+                        <Badge className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 text-cyan-400 border-cyan-500/40 text-xs px-2 py-0.5">
+                          {stack.legs} Legs
+                        </Badge>
+                        <Badge className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-purple-400 border-purple-500/40 text-xs px-2 py-0.5">
+                          {stack.odds}
+                        </Badge>
+                      </div>
+                      
+                      <div className="flex items-center gap-1.5 bg-black/50 px-2.5 py-1 rounded-md">
+                        <Users className="w-3 h-3 text-pink-400" />
+                        <span className="text-xs text-pink-400">{stack.popularity}%</span>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1 space-y-1.5">
+                        {stack.players.map((player, i) => (
+                          <div key={i} className="flex items-center gap-2 text-sm">
+                            <div className="w-1 h-1 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500" />
+                            <span className="text-slate-300">{player}</span>
+                          </div>
+                        ))}
+                      </div>
+                      
+                      <div className="flex flex-col items-end gap-3 flex-shrink-0">
+                        <div className="text-right">
+                          <div className="text-xs text-slate-500 mb-0.5">Edge</div>
+                          <div className="text-2xl bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                            {stack.edge}
+                          </div>
+                        </div>
+                        <Button size="sm" className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-xs h-8 px-3 shadow-[0_0_15px_rgba(6,182,212,0.3)]">
+                          <Copy className="w-3 h-3 mr-1.5" />
+                          Copy
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </Card>
+          </TabsContent>
+        </Tabs>
+
+      </TabsContent>
+      </Tabs>
     </div>
   );
 }

@@ -8,8 +8,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '.
 import { Badge } from './ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './ui/tabs';
 import { Slider } from './ui/slider';
-import { Lock, X, ThumbsUp, ThumbsDown, Download, Save, Play } from 'lucide-react';
+import { Lock, X, Download, Save, Play } from 'lucide-react';
 import { Progress } from './ui/progress';
+import AdvancedFilters from './AdvancedFilters';
 import type { LineupBuilderProps, Player, Lineup } from '../types';
 
 // Mock player data
@@ -114,14 +115,14 @@ export default function LineupBuilder({ sport, slate }: LineupBuilderProps) {
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Configuration Panel */}
-        <Card className="bg-slate-800 border-slate-700 p-6 lg:col-span-1">
+        <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6 lg:col-span-1">
           <h3 className="text-white mb-4">Optimization Settings</h3>
           
           <div className="space-y-4">
             <div>
               <Label className="text-slate-300">DFS Site</Label>
               <Select value={site} onValueChange={setSite}>
-                <SelectTrigger className="bg-slate-700 border-slate-600 text-white mt-1">
+                <SelectTrigger className="bg-black/50 border-cyan-500/20 text-white mt-1">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -138,7 +139,7 @@ export default function LineupBuilder({ sport, slate }: LineupBuilderProps) {
                 type="number"
                 value={numLineups}
                 onChange={(e) => setNumLineups(e.target.value)}
-                className="bg-slate-700 border-slate-600 text-white mt-1"
+                className="bg-black/50 border-cyan-500/20 text-white mt-1"
                 min="1"
                 max="150"
               />
@@ -147,7 +148,7 @@ export default function LineupBuilder({ sport, slate }: LineupBuilderProps) {
             <div>
               <Label className="text-slate-300">Optimization Goal</Label>
               <Select defaultValue="maximize">
-                <SelectTrigger className="bg-slate-700 border-slate-600 text-white mt-1">
+                <SelectTrigger className="bg-black/50 border-cyan-500/20 text-white mt-1">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -185,7 +186,7 @@ export default function LineupBuilder({ sport, slate }: LineupBuilderProps) {
             <div>
               <Label className="text-slate-300">Stacking Rules</Label>
               <Select defaultValue="qb-wr">
-                <SelectTrigger className="bg-slate-700 border-slate-600 text-white mt-1">
+                <SelectTrigger className="bg-black/50 border-cyan-500/20 text-white mt-1">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -219,12 +220,11 @@ export default function LineupBuilder({ sport, slate }: LineupBuilderProps) {
         </Card>
 
         {/* Player Selection Grid */}
-        <Card className="bg-slate-800 border-slate-700 p-6 lg:col-span-2">
+        <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6 lg:col-span-2">
           <div className="mb-4">
             <h3 className="text-white mb-2">Player Pool</h3>
-            <Input
-              placeholder="Search players..."
-              className="bg-slate-700 border-slate-600 text-white"
+            <AdvancedFilters
+              onFilterChange={(filters) => console.log('Filters changed:', filters)}
             />
           </div>
 
@@ -293,7 +293,7 @@ export default function LineupBuilder({ sport, slate }: LineupBuilderProps) {
 
       {/* Generated Lineups */}
       {generatedLineups.length > 0 && (
-        <Card className="bg-slate-800 border-slate-700 p-6">
+        <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-white">Generated Lineups ({generatedLineups.length})</h3>
             <Button variant="outline" className="border-slate-600 text-slate-300">
@@ -303,7 +303,7 @@ export default function LineupBuilder({ sport, slate }: LineupBuilderProps) {
           </div>
 
           <Tabs defaultValue="lineup-1" className="w-full">
-            <TabsList className="bg-slate-700">
+            <TabsList className="bg-black/50 border border-cyan-500/20">
               {generatedLineups.map((lineup) => (
                 <TabsTrigger key={lineup.id} value={`lineup-${lineup.id}`}>
                   Lineup {lineup.id}
@@ -313,11 +313,11 @@ export default function LineupBuilder({ sport, slate }: LineupBuilderProps) {
             {generatedLineups.map((lineup) => (
               <TabsContent key={lineup.id} value={`lineup-${lineup.id}`}>
                 <div className="grid md:grid-cols-2 gap-4 mb-4">
-                  <Card className="bg-slate-700 border-slate-600 p-4">
+                  <Card className="bg-black/50 border-cyan-500/20 p-4">
                     <div className="text-slate-400 text-sm">Total Salary</div>
                     <div className="text-white text-2xl">${lineup.totalSalary.toLocaleString()}</div>
                   </Card>
-                  <Card className="bg-slate-700 border-slate-600 p-4">
+                  <Card className="bg-black/50 border-cyan-500/20 p-4">
                     <div className="text-slate-400 text-sm">Projected Points</div>
                     <div className="text-blue-400 text-2xl">{lineup.projectedPoints.toFixed(1)}</div>
                   </Card>

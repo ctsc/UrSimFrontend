@@ -40,7 +40,7 @@ export default function DashboardOverview({ sport }: DashboardOverviewProps) {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-cyan-500/20 p-6 relative overflow-hidden group hover:border-cyan-400/40 transition-all">
+        <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6 relative overflow-hidden group hover:border-cyan-400/40 transition-all hover:shadow-[0_0_30px_rgba(6,182,212,0.15)]">
           <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <div className="relative">
             <div className="flex items-center justify-between mb-2">
@@ -54,8 +54,8 @@ export default function DashboardOverview({ sport }: DashboardOverviewProps) {
           </div>
         </Card>
 
-        <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-blue-500/20 p-6 relative overflow-hidden group hover:border-blue-400/40 transition-all">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+        <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6 relative overflow-hidden group hover:border-cyan-400/40 transition-all hover:shadow-[0_0_30px_rgba(59,130,246,0.15)]">
+          <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <div className="relative">
             <div className="flex items-center justify-between mb-2">
               <span className="text-slate-400">High Value Props</span>
@@ -68,8 +68,8 @@ export default function DashboardOverview({ sport }: DashboardOverviewProps) {
           </div>
         </Card>
 
-        <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-purple-500/20 p-6 relative overflow-hidden group hover:border-purple-400/40 transition-all">
-          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+        <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6 relative overflow-hidden group hover:border-cyan-400/40 transition-all hover:shadow-[0_0_30px_rgba(124,58,237,0.15)]">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <div className="relative">
             <div className="flex items-center justify-between mb-2">
               <span className="text-slate-400">Avg Edge</span>
@@ -82,8 +82,8 @@ export default function DashboardOverview({ sport }: DashboardOverviewProps) {
           </div>
         </Card>
 
-        <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-pink-500/20 p-6 relative overflow-hidden group hover:border-pink-400/40 transition-all">
-          <div className="absolute inset-0 bg-gradient-to-br from-pink-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+        <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6 relative overflow-hidden group hover:border-cyan-400/40 transition-all hover:shadow-[0_0_30px_rgba(236,72,153,0.15)]">
+          <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
           <div className="relative">
             <div className="flex items-center justify-between mb-2">
               <span className="text-slate-400">Popular Parlays</span>
@@ -98,7 +98,7 @@ export default function DashboardOverview({ sport }: DashboardOverviewProps) {
       </div>
 
       {/* Today's Games Table */}
-      <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-cyan-500/20 p-6">
+      <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6 shadow-[0_0_30px_rgba(6,182,212,0.1)]">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-white">Today's {sport} Games</h3>
           <Badge variant="outline" className="border-cyan-500/30 text-cyan-400">
@@ -161,7 +161,7 @@ export default function DashboardOverview({ sport }: DashboardOverviewProps) {
       </Card>
 
       {/* Top Player Props */}
-      <Card className="bg-gradient-to-br from-slate-900 to-slate-800 border-cyan-500/20 p-6">
+      <Card className="bg-black/40 backdrop-blur-sm border-cyan-500/20 p-6 shadow-[0_0_30px_rgba(6,182,212,0.1)]">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-white">Top Value Player Props</h3>
           <Button variant="outline" className="border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10">
